@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Busca Coito</title>
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="game"></canvas>
+        <div class="btns">
+            <button id="up">Arriba</button>
+            <button id="down">Abajo</button>
+            <button id="left">Izquierda</button>
+            <button id="right">Derecha</button>
+        </div>
+        <div class="inactive wingame-container">
+            <h1>🏆</h1>
+            <p>¡Felicitaciones! Has completado el juego</p>
+            <button class="game-restart">Volver a empezar</button>
+        </div>
+        <div class="inactive gameOver-container">
+            <h1>☠️</h1>
+            <p>¡Perdiste! JAJAJA QUE PETEEEEEEE</p>
+            <button class="game-restart2">Volver a empezar</button>
+        </div>
+        <div class="messages">
+            <p>Vidas: <span id="lives"></span></p>
+            <p>Tiempo: <span id="tiempo">⏱️</span></p>
+            <p>Record:🚩 <span id="record"></span></p>
+            <p id="resultado"></p>
+        </div>
+    </div>
+
+    <script src="/maps.js"></script>
+    <script src="/games.js"></script>
+
+
+
+</body>
+</html>
