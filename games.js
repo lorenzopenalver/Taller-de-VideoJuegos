@@ -39,7 +39,7 @@ let enemiesPositions = []
 
 let canvasSize;
 let elementSize;
-function reload (){
+function reload() {
     location.reload()
 }
 window.addEventListener("load", setCanvasSize)
@@ -55,16 +55,17 @@ function movePlayer() {
     const giftCollisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3);
     const giftCollisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
     const giftCollision = giftCollisionX && giftCollisionY;
-
+    game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
     if (giftCollision) {
         lvlWin();
     }
-
     if (enemiesPositions.find(item => item.x.toFixed(3) == playerPosition.x.toFixed(3) && item.y.toFixed(3) == playerPosition.y.toFixed(3))) {
         console.log("Chocaste con una bomba")
-        lvlLost()
-    } 
-    game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+       lvlLost()
+    }
+
+    
+
 }
 
 
@@ -89,16 +90,16 @@ function startGame() {
     enemiesPositions = []
     const map = maps[level]
 
-    if(!map){
-       
+    if (!map) {
+
         winConfig()
         return;
     }
-  
 
-    if (!timeStart){
+
+    if (!timeStart) {
         timeStart = Date.now();
-        timeInterval = setInterval(showTime,100)
+        timeInterval = setInterval(showTime, 100)
         showRecord();
     }
 
@@ -130,9 +131,9 @@ function startGame() {
                     x: posX,
                     y: posY,
                 });
-                
+
             }
-            
+
             game.fillText(emoji, posX, posY)
         });
 
@@ -156,8 +157,9 @@ function startGame() {
     //game.fillText("Platzi", 100 , 20)
 
 }
+
 function lvlWin() {
-    console.log('Subiste de nisvel!');
+    console.log('Subiste de nivel!');
     level++;
     startGame()
 }
@@ -168,14 +170,14 @@ function winConfig() {
 
     const recordTime = localStorage.getItem("record_time")
     const playerTime = formatTime(Date.now() - timeStart)
-    if (recordTime){
-    if ( recordTime >= playerTime){
-        localStorage.setItem("record_time", playerTime)
-        Resultado.textContent = "Record superado"
-    }else{
-        Resultado.textContent = "Record no superado"   
-     }
-    }else{
+    if (recordTime) {
+        if (recordTime >= playerTime) {
+            localStorage.setItem("record_time", playerTime)
+            Resultado.textContent = "Record superado"
+        } else {
+            Resultado.textContent = "Record no superado"
+        }
+    } else {
         localStorage.setItem("record_time", playerTime)
         Resultado.textContent = "Primer record"
     }
@@ -185,38 +187,48 @@ function winConfig() {
 function formatTime(milisegundos) {
     const segundos = Math.floor(milisegundos / 1000);
     const milisegs = Math.floor(milisegundos / 100);
-  
-  
-    return ` ${segundos} segundos ${milisegs} milisegundos`;
-  }
 
-function lvlLost() {
+
+    return ` ${segundos} segundos ${milisegs} milisegundos`;
+}
+
+ function lvlLost() {
     playerPosition.x = doorPosition.x;
     playerPosition.y = doorPosition.y;
     lives--;
-    if (lives <= 0){
+    if (lives <= 0) {
         gameOver()
     }
     startGame()
 }
-
-function showLives (){
+function showColision() {
+    game.fillText (emojis['BOMB_COLLISION'], playerPosition.x, playerPosition.y);
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
+    console.log ('choque');
+    
+  }
+function showLives() {
     let heartsArray = Array(lives).fill(emojis["HEART"])
     spanLives.textContent = heartsArray.join("")
 
 }
-function showTime(){
+function showTime() {
     spanTime.textContent = formatTime(Date.now() - timeStart)
 }
 function showRecord() {
     spanRecord.textContent = localStorage.getItem("record_time")
 }
 
-
+let validator = true
 function gameOver() {
     clearInterval(timeInterval)
     loseMessage.classList.remove("inactive")
-    
+    btnDown.removeEventListener("click", moveDown)
+    btnUp.removeEventListener("click", moveUp)
+    btnLeft.removeEventListener("click", moveLeft)
+    btnRight.removeEventListener("click", moveRight)
+    validator = false
     //timeStart = Date.now();
 }
 btnUp.addEventListener("click", moveUp)
@@ -225,22 +237,28 @@ btnLeft.addEventListener("click", moveLeft)
 btnRight.addEventListener("click", moveRight)
 
 function keyboard(event) {
-    switch (event.key) {
-        case "ArrowUp":
-            moveUp()
-            break;
-        case "ArrowDown":
-            moveDown()
-            break;
-        case "ArrowLeft":
-            moveLeft()
-            break;
-        case "ArrowRight":
-            moveRight()
-            break;
-        default:
-            break;
+    if (validator){
+        switch (event.key) {
+            case "ArrowUp":
+                moveUp()
+                break;
+            case "ArrowDown":
+                moveDown()
+                break;
+            case "ArrowLeft":
+                moveLeft()
+                break;
+            case "ArrowRight":
+                moveRight()
+                break;
+            default:
+                break;
+        }
+    }else{
+        return
     }
+    
+
 }
 
 function moveUp() {
